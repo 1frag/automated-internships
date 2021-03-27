@@ -1,13 +1,14 @@
 from fastapi import Depends, status, HTTPException
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from tortoise.exceptions import IntegrityError
 
-from .. import forms, utils
-from ..settings import settings
-from ..db import models
+import utils
+from . import forms
+from core.settings import settings
+from db import models
 
 router = InferringRouter()
 
@@ -24,7 +25,7 @@ class LoginHandler:
     ) -> forms.LoginOutput:
         """Получение JWT токена для выполнения последующих операций"""
 
-        user = await models.Users.get_or_none(login=form.login)
+        user = await models.User.get_or_none(login=form.login)
         if (user is None) or (not utils.auth.check_password(form.password, user.password)):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
@@ -46,7 +47,7 @@ class RegistrationHandler:
         """Регистрация нового пользователя"""
 
         try:
-            await models.Users.create(
+            await models.User.create(
                 login=form.login,
                 password=utils.auth.get_password(form.password)
             )

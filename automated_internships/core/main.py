@@ -3,8 +3,8 @@ from fastapi.responses import JSONResponse
 from fastapi_jwt_auth.exceptions import AuthJWTException
 from tortoise.contrib.fastapi import register_tortoise
 
-from .views import auth
-from .db.conf import TORTOISE_ORM
+from views import auth
+from db.conf import TORTOISE_ORM
 
 app = FastAPI(debug=True)
 
