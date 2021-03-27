@@ -1,5 +1,5 @@
 -- upgrade --
-CREATE TABLE IF NOT EXISTS "users" (
+CREATE TABLE IF NOT EXISTS "user" (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "login" VARCHAR(63) NOT NULL UNIQUE,
     "password" VARCHAR(127) NOT NULL
