@@ -1,6 +1,6 @@
 import asyncio
 from tortoise import Tortoise
 
-from . import conf
+from db import conf, models
 
-asyncio.run(Tortoise.init(config=conf.TORTOISE_ORM))
+init = Tortoise.init(config=conf.TORTOISE_ORM)

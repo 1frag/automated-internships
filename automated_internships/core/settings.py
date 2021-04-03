@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     authjwt_secret_key: str
     expiration_token_time: datetime.timedelta = datetime.timedelta(days=5)
 
+    email_login: str
+    email_password: str
+
 
 settings = Settings()
 
