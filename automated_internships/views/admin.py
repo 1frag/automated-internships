@@ -1,17 +1,13 @@
 import asyncio
-import smtplib
-import ssl
 import logging
-from email.mime.text import MIMEText
 
-from fastapi import Security
+from fastapi import Security, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.security.api_key import APIKeyHeader
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from tortoise.exceptions import IntegrityError
 from tortoise.transactions import in_transaction
-import aiomisc
 
 import utils
 from . import forms
@@ -28,6 +24,7 @@ class RegistrationHandler:
     @router.post("/registration", responses={
         201: {"class": JSONResponse},
         400: {"class": JSONResponse},
+        403: {"class": JSONResponse},
     })
     async def registration(
             self,
@@ -35,6 +32,9 @@ class RegistrationHandler:
             token: str = Security(api_key_header),
     ):
         """Регистрация нового пользователя"""
+
+        if token != settings.admin_api_key:
+            raise HTTPException(status_code=403)
 
         users = [(pwd := utils.auth.generate_password(), models.User(
             email=form.email,
