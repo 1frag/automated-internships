@@ -1,4 +1,4 @@
-from fastapi import Depends, status, HTTPException
+from fastapi import Depends, status, HTTPException, Response
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from fastapi_utils.cbv import cbv
@@ -22,6 +22,7 @@ class LoginHandler:
     async def login(
             self,
             form: forms.LoginInput,
+            response: Response,
             authorize: AuthJWT = Depends(),
     ) -> forms.LoginOutput:
         """Получение JWT токена для выполнения последующих операций"""
@@ -33,19 +34,21 @@ class LoginHandler:
         access_token = authorize.create_access_token(
             subject=user.email, expires_time=settings.expiration_token_time
         )
+
+        authorize.set_access_cookies(access_token, response)
         return forms.LoginOutput(token=access_token)
 
 
 @cbv(router)
 class AuthCheck:
-    @router.get("/check")
+    @router.get("/check", operation_id="authorize")
     async def check(
             self,
             authorize: AuthJWT = Depends(),
-            token: str = Depends(utils.deps.auth)
     ):
         """Ручка проверки авторизации"""
 
+        print("hi")
         authorize.jwt_required()
         current_user = authorize.get_jwt_subject()
         return JSONResponse(status_code=200, content={"email": current_user})
@@ -92,12 +95,11 @@ class ChangePassword:
         await user.save()
         raise HTTPException(status_code=204)
 
-    @router.post("/change_password/by_auth")
+    @router.post("/change_password/by_auth", operation_id="authorize")
     async def by_auth(
             self,
             new_password: str,
             authorize: AuthJWT = Depends(),
-            token: str = Depends(utils.deps.auth),
     ):
         """Ручка, чтобы поменять пароль с помощью JWT токена"""
 

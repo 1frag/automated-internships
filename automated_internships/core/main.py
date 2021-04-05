@@ -7,6 +7,7 @@ from fastapi_admin.site import Site
 
 from views import auth, admin
 from db.conf import TORTOISE_ORM
+from core.utils import custom_openapi
 
 app = FastAPI(debug=True)
 
@@ -43,3 +44,5 @@ async def startup():
             theme_switcher=True,
         ),
     )
+
+app.openapi = lambda: custom_openapi(app)
