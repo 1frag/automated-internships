@@ -5,14 +5,14 @@ from tortoise.contrib.fastapi import register_tortoise
 from fastapi_admin.factory import app as admin_app
 from fastapi_admin.site import Site
 
-from views import auth, admin
-from db.conf import TORTOISE_ORM
-from core.utils import custom_openapi
+from ..views import auth, admin
+from ..db.conf import TORTOISE_ORM
+from ..core.utils import custom_openapi
 
-app = FastAPI(debug=True)
+app = FastAPI(debug=True, openapi_url="/api/openapi.json")
 
-app.include_router(auth.router, prefix="/v1/auth", tags=["auth"])
-app.include_router(admin.router, prefix="/v1/admin", tags=["admin"])
+app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(admin.router, prefix="/api/v1/admin", tags=["admin"])
 
 
 @app.exception_handler(AuthJWTException)

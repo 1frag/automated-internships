@@ -5,11 +5,11 @@ from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from tortoise.transactions import in_transaction
 
-import utils
+from .. import utils
 from . import forms
-from core.settings import settings
-from db import models
-from controllers.email_ctl import EmailManager
+from ..core.settings import settings
+from ..db import models
+from ..controllers.email_ctl import EmailManager
 
 router = InferringRouter()
 

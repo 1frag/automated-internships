@@ -4,8 +4,8 @@ from email.mime.text import MIMEText
 import aiomisc
 from textwrap import dedent
 
-from core.settings import settings
-from db import models
+from ..core.settings import settings
+from ..db import models
 
 
 class EmailManager:
