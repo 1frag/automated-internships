@@ -8,8 +8,10 @@ uvicorn==0.13.4
 
 passlib==1.7.4
 pydantic==1.8.1
-tortoise-orm==0.16.21
+tortoise-orm==0.17.1
 asyncpg==0.22.0
 psycopg2-binary==2.8.6
 psycopg2==2.8.6
-aerich==0.5.1
+aerich==0.5.2
+aiomisc==12.1.0
+fastapi_admin==0.3.3

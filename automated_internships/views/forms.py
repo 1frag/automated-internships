@@ -1,11 +1,15 @@
-from tortoise.contrib.pydantic import pydantic_model_creator
 from pydantic import BaseModel
 
-from db.models import User
+
+class RegistrationInput(BaseModel):
+    email: str
+    first_name: str
+    last_name: str
 
 
-RegistrationInput = pydantic_model_creator(User, include=("login", "password"))
-LoginInput = pydantic_model_creator(User, include=("login", "password"))
+class LoginInput(BaseModel):
+    email: str
+    password: str
 
 
 class LoginOutput(BaseModel):
